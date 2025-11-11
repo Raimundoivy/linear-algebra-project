@@ -41,9 +41,7 @@ def input_vetor(texto_prompt="Digite o vetor"):
 def main():
     v1 = input_vetor("Vetor v1")
     v2 = input_vetor("Vetor v2")
-    
-    print("\n--- Resultados ---")
-    
+        
     try:
         print(f"v1 + v2:     {adicionar_vetores(v1, v2)}")
         print(f"v1 - v2:     {subtrair_vetores(v1, v2)}")

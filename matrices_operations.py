@@ -114,7 +114,6 @@ def main():
     m1 = input_matriz("Matriz m1")
     m2 = input_matriz("Matriz m2")
         
-    print("\n--- Resultados (Operações Binárias) ---")
     try:
         print(f"m1 + m2:\n{np.array(adicionar_matrizes(m1, m2))}")
     except ValueError as e:
@@ -130,7 +129,6 @@ def main():
     except ValueError as e:
         print(f"Erro (m1 * m2): {e}")
 
-    print("\n--- Análise (m1) ---")
     try:
         print(f"Determinante(m1): {determinante_matriz(m1)}")
         
@@ -145,7 +143,6 @@ def main():
     except (ValueError, np.linalg.LinAlgError) as e:
         print(f"Erro na análise de m1 (pode não ser quadrada): {e}")
     
-    print("\n--- Análise (m2) ---")
     try:
         print(f"Determinante(m2): {determinante_matriz(m2)}")
         
