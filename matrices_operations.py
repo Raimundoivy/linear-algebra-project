@@ -33,25 +33,13 @@ def adicionar_matrizes(m1, m2):
     if len(m1) != len(m2) or len(m1[0]) != len(m2[0]):
         raise ValueError("Matrizes devem ter as mesmas dimensões para adição.")
     
-    resultado = []
-    for i in range(len(m1)):
-        linha = []
-        for j in range(len(m1[0])):
-            linha.append(m1[i][j] + m2[i][j])
-        resultado.append(linha)
-    return resultado
+    return [[c1 + c2 for c1, c2 in zip(linha1, linha2)] for linha1, linha2 in zip(m1, m2)]
 
 def subtrair_matrizes(m1, m2):
     if len(m1) != len(m2) or len(m1[0]) != len(m2[0]):
         raise ValueError("Matrizes devem ter as mesmas dimensões para subtração.")
     
-    resultado = []
-    for i in range(len(m1)):
-        linha = []
-        for j in range(len(m1[0])):
-            linha.append(m1[i][j] - m2[i][j])
-        resultado.append(linha)
-    return resultado
+    return [[c1 - c2 for c1, c2 in zip(linha1, linha2)] for linha1, linha2 in zip(m1, m2)]
 
 def multiplicar_matrizes(m1, m2):
     linhas_m1 = len(m1)
@@ -62,13 +50,12 @@ def multiplicar_matrizes(m1, m2):
     if cols_m1 != linhas_m2:
         raise ValueError(f"Número de colunas de m1 ({cols_m1}) deve ser igual ao número de linhas de m2 ({linhas_m2}).")
 
-    resultado = [[0.0 for _ in range(cols_m2)] for _ in range(linhas_m1)]
-
-    for i in range(linhas_m1):
-        for j in range(cols_m2):
-            for k in range(cols_m1):
-                resultado[i][j] += m1[i][k] * m2[k][j]
-    return resultado
+    m2_transposta = list(zip(*m2))
+    
+    return [
+        [sum(elem_m1 * elem_m2 for elem_m1, elem_m2 in zip(linha_m1, col_m2)) for col_m2 in m2_transposta]
+        for linha_m1 in m1
+    ]
 
 
 def input_matriz(texto_prompt="Digite a matriz"):
@@ -116,18 +103,10 @@ def main():
         
     try:
         print(f"m1 + m2:\n{np.array(adicionar_matrizes(m1, m2))}")
-    except ValueError as e:
-        print(f"Erro (m1 + m2): {e}")
-
-    try:
         print(f"\nm1 - m2:\n{np.array(subtrair_matrizes(m1, m2))}")
-    except ValueError as e:
-        print(f"Erro (m1 - m2): {e}")
-    
-    try:
         print(f"\nm1 * m2:\n{np.array(multiplicar_matrizes(m1, m2))}")
-    except ValueError as e:
-        print(f"Erro (m1 * m2): {e}")
+    except (ValueError, np.linalg.LinAlgError) as e:
+        print(f"Erro nas operações binárias (dimensões incompatíveis?): {e}")
 
     try:
         print(f"Determinante(m1): {determinante_matriz(m1)}")
@@ -137,7 +116,7 @@ def main():
         
         try:
             print(f"\nInversa(m1):\n{inversa_matriz(m1)}")
-        except ValueError as e:
+        except (ValueError, np.linalg.LinAlgError) as e:
             print(f"Erro (inversa m1): {e}")
             
     except (ValueError, np.linalg.LinAlgError) as e:
@@ -151,7 +130,7 @@ def main():
 
         try:
             print(f"\nInversa(m2):\n{inversa_matriz(m2)}")
-        except ValueError as e:
+        except (ValueError, np.linalg.LinAlgError) as e:
             print(f"Erro (inversa m2): {e}")
 
     except (ValueError, np.linalg.LinAlgError) as e:
